@@ -1,0 +1,19 @@
+{
+    "name": "yidas/phpspreadsheet-helper",
+    "description": "PHP Excel Helper - Read, Create and Write Spreadsheet with easy way based on PhpSpreadsheet",
+    "keywords": ["PhpSpreadsheet", "PHPExcel", "php", "excel", "sheet", "PhpSpreadsheet helper"],
+    "homepage": "https://github.com/yidas/phpspreadsheet-helper",
+    "type": "library",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/yidas/phpspreadsheet-helper/issues",
+        "source": "https://github.com/yidas/phpspreadsheet-helperp"
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.1.0"
+    },
+    "autoload": {
+        "classmap": ["src/phpSpreadsheet"]
+    }
+}
