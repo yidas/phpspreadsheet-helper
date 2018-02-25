@@ -8,7 +8,7 @@ use Exception;
  * PhpSpreadsheet Helper
  * 
  * @author      Nick Tsai <myintaer@gmail.com>
- * @version     1.0.0
+ * @version     1.1.1
  * @filesource 	PhpSpreadsheet <https://github.com/PHPOffice/PhpSpreadsheet>
  * @see         https://github.com/yidas/phpspreadsheet-helper
  * @example
@@ -375,6 +375,8 @@ class Helper
      * @param bool $options [
      *  row (int) Ended row number
      *  column (int) Ended column number
+     *  timestamp (bool) Excel datetime to Unixtime
+     *  timestampFormat (string) Format for date() when usgin timestamp
      *  ]
      * @return array Data of Spreadsheet
      */
@@ -386,6 +388,8 @@ class Helper
         $defaultOptions = [
             'row' => NULL,
             'column' => NULL,
+            'timestamp' => true,
+            'timestampFormat' => 'Y-m-d H:i:s', // False would use Unixtime
         ];
         $options = array_replace($defaultOptions, $options);
 
@@ -399,7 +403,15 @@ class Helper
         for ($row = 1; $row <= $highestRow; ++$row) {
             $pointerColumn = &$pointerRow[];
             for ($col = 1; $col <= $highestColumn; ++$col) {
-                $value = $worksheet->getCellByColumnAndRow($col, $row)->getValue();
+                $cell = $worksheet->getCellByColumnAndRow($col, $row);
+                $value = $cell->getValue();
+                // Timestamp option
+                if ($options['timestamp'] && \PhpOffice\PhpSpreadsheet\Shared\Date::isDateTime($cell)) {
+                    $value = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($value);
+                    // Timestamp Format option
+                    $value = ($options['timestampFormat']) 
+                        ? date($options['timestampFormat'], $value) : $value;
+                }
                 $value = ($toString) ? (string)$value : $value;
                 $pointerColumn[] = $value;
             }
