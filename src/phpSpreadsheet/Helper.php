@@ -2,6 +2,8 @@
 
 namespace yidas\phpSpreadsheet;
 
+use Exception;
+
 /**
  * PhpSpreadsheet Helper
  * 
@@ -78,27 +80,47 @@ class Helper
      * Extension list for writer
      */
     private static $_writerTypeInfo = [
-        'Xls' => [
-            'extension' => '.xls',
-            'contentType' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        'Ods' => [
+            'extension' => '.ods',
+            'contentType' => 'application/vnd.oasis.opendocument.spreadsheet'
         ],
         'Xlsx' => [
             'extension' => '.xlsx',
             'contentType' => 'application/vnd.ms-excel'
+        ],
+        'Xls' => [
+            'extension' => '.xls',
+            'contentType' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ],
+        'Html' => [
+            'extension' => '.html',
+            'contentType' => 'text/html'
+        ],
+        'Csv' => [
+            'extension' => '.csv',
+            'contentType' => 'text/csv'
         ],
     ];
 
     /** 
      * New or set an PhpSpreadsheet object
      * 
-     * @param object $PhpSpreadsheetObj PhpSpreadsheet object
+     * @param object|string $phpSpreadsheet PhpSpreadsheet object or filepath
      * @return self
      */
-    public static function newSpreadsheet($phpSpreadsheetObj=NULL)
+    public static function newSpreadsheet($phpSpreadsheet=NULL)
     {
-        self::$_objSpreadsheet = (is_object($phpSpreadsheetObj))
-            ? $phpSpreadsheetObj
-            : new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        if (is_object($phpSpreadsheet)) {
+            
+            self::$_objSpreadsheet = &$phpSpreadsheet;
+        } 
+        elseif (is_string($phpSpreadsheet)) {
+
+            self::$_objSpreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($phpSpreadsheet);
+        }
+        else {
+            self::$_objSpreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        }
         
         return new static();
     }
@@ -108,7 +130,7 @@ class Helper
      * 
      * @return object PhpSpreadsheet object
      */
-    public static function getExcel()
+    public static function getSpreadsheet()
     {
         return self::$_objSpreadsheet;
     }
@@ -319,21 +341,23 @@ class Helper
      * Output an Excel file
      * 
      * @param string $filename
-     * @param string $excelType
+     * @param string $format
      */
-    public static function output($filename='excel', $excelType='Xlsx')
+    public static function output($filename='excel', $format='Xlsx')
     {
         $objPhpSpreadsheet = self::validExcelObj();
 
         // Create Writer first
-        $objWriter = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($objPhpSpreadsheet, $excelType);
+        $objWriter = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($objPhpSpreadsheet, $format);
 
         /**
          * @todo Type Mapping
          */
-        $excelType = isset(self::$_writerTypeInfo[$excelType]) ? $excelType : 'Xlsx';
-        $extension = self::$_writerTypeInfo[$excelType]['extension'];
-        $contentType = self::$_writerTypeInfo[$excelType]['contentType'];
+        $inTypeList = isset(self::$_writerTypeInfo[$format]) ? true : false;
+        $extension = ($inTypeList) ? self::$_writerTypeInfo[$format]['extension'] : '';
+        $contentType = ($inTypeList) 
+            ? self::$_writerTypeInfo[$format]['contentType'] 
+            : 'application/octet-stream';
 
         // Redirect output to a client's web browser
         header("Content-Type: {$contentType}");
@@ -342,6 +366,46 @@ class Helper
 
         $objWriter->save('php://output');
         exit;
+    }
+
+    /**
+     * Get rows from the actived sheet of PhpSpreadsheet
+     * 
+     * @param bool $toString All values from sheet to be string type
+     * @param bool $options [
+     *  row (int) Ended row number
+     *  column (int) Ended column number
+     *  ]
+     * @return array Data of Spreadsheet
+     */
+    public static function getRows($toString=true, Array $options=[])
+    {
+        $worksheet = self::validSheetObj();
+
+        // Options
+        $defaultOptions = [
+            'row' => NULL,
+            'column' => NULL,
+        ];
+        $options = array_replace($defaultOptions, $options);
+
+        // Get the highest row and column numbers referenced in the worksheet
+        $highestRow = ($options['row']) ?: $worksheet->getHighestRow();
+        $highestColumn = ($options['column']) ?: self::alpha2num($worksheet->getHighestColumn());
+
+        // Fetch data from the sheet
+        $data = [];
+        $pointerRow = &$data;
+        for ($row = 1; $row <= $highestRow; ++$row) {
+            $pointerColumn = &$pointerRow[];
+            for ($col = 1; $col <= $highestColumn; ++$col) {
+                $value = $worksheet->getCellByColumnAndRow($col, $row)->getValue();
+                $value = ($toString) ? (string)$value : $value;
+                $pointerColumn[] = $value;
+            }
+        }
+
+        return $data;
     }
 
     /**
@@ -463,6 +527,8 @@ class Helper
     /**
      * Number to Alpha
      * 
+     * Optimizing from \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex()
+     * 
      * @example
      *  1 => A, 27 => AA
      * @param int $n column number
@@ -481,6 +547,8 @@ class Helper
 
     /**
      * Alpha to Number
+     * 
+     * Optimizing from \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString()
      * 
      * @example
      *  A => 1, AA => 27 

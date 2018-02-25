@@ -19,8 +19,10 @@ OUTLINE
 * [INSTALLATION](#installation)
 
 * [USAGE](#usage)
-  - [Merge Cells](#merge-cells)
+  - [Read & Write](#read--write)
+  - [Add Rows & Get Rows](#add-rows--get-rows)
   - [PhpSpreadsheet Original Usage Injection](#phpspreadsheet-original-usage-injection)
+  - [Merge Cells](#merge-cells)
   - [Multiple Sheets](#multiple-sheets)
   - [Map of Coordinates & Ranges](#multiple-sheets)
   - [Cells Format](#cells-format)
@@ -29,6 +31,8 @@ OUTLINE
 
 DEMONSTRATION
 -------------
+
+### Write
 
 ```php
 \yidas\phpSpreadsheet\Helper::newSpreadsheet()
@@ -39,6 +43,17 @@ DEMONSTRATION
     ])
     ->output('My Excel');
 ```
+
+## Read
+
+```php
+$data = \yidas\phpSpreadsheet\Helper::newSpreadsheet('/tmp/excel.xlsx')
+    ->getRows();
+    
+print_r($data);
+```
+
+Return two-dimensional array data contained rows > columns spread sheet.
 
 ---
 
@@ -62,20 +77,26 @@ require __DIR__ . '/vendor/autoload.php';
 USAGE
 -----
 
-### Merge Cells
+### Read & Write
 
 ```php
-\yidas\phpSpreadsheet\Helper::newSpreadsheet()
-    ->addRows([
-        [['value'=>'SN', 'row'=>2], ['value'=>'Language', 'col'=>2], ['value'=>'Block', 'row'=>2, 'col'=>2]],
-        ['','English','繁體中文',['skip'=>2]],
-    ])
-    ->addRows([
-        ['1', 'Computer','電腦','#15'],
-        ['2', 'Phone','手機','#4','#62'],
-    ])
-    ->output('Merged Excel');
+\yidas\phpSpreadsheet\Helper::newSpreadsheet('/tmp/excel.xlsx')
+    ->addRow(['Modified A1'])
+    ->output();
 ```
+
+### Add Rows & Get Rows
+
+|Method   |Description|
+|:--------|:----------|
+|addRow() |Add a row to the actived sheet of PhpSpreadsheet|
+|addRows()|Add rows to the actived sheet of PhpSpreadsheet|
+|getRows()|Get rows from the actived sheet of PhpSpreadsheet|
+
+[Write Example code](#write)
+
+[Read Example code](#read)
+
 
 ### PhpSpreadsheet Original Usage Injection
 
@@ -108,16 +129,31 @@ Helper::newSpreadsheet()
     ->setSheet(0, 'Sheet')
     ->addRow(['SN']);
 // Get the PhpSpreadsheet object created by Helper
-$objPHPExcel = Helper::getExcel();
-$objPHPExcel->getProperties()
+$objSpreadsheet = Helper::getSpreadsheet();
+$objSpreadsheet->getProperties()
     ->setCreator("Nick Tsai")
     ->setTitle("Office 2007 XLSX Document");
 // Get the actived sheet object created by Helper
-$objPHPExcelSheet = Helper::getSheet();
-$objPHPExcelSheet->setCellValue('A2', '1');
-$objPHPExcelSheet->setCellValue('A3', '2');
+$objSheet = Helper::getSheet();
+$objSheet->setCellValue('A2', '1');
+$objSheet->setCellValue('A3', '2');
 
 Helper::output();
+```
+
+### Merge Cells
+
+```php
+\yidas\phpSpreadsheet\Helper::newSpreadsheet()
+    ->addRows([
+        [['value'=>'SN', 'row'=>2], ['value'=>'Language', 'col'=>2], ['value'=>'Block', 'row'=>2, 'col'=>2]],
+        ['','English','繁體中文',['skip'=>2]],
+    ])
+    ->addRows([
+        ['1', 'Computer','電腦','#15'],
+        ['2', 'Phone','手機','#4','#62'],
+    ])
+    ->output('Merged Excel');
 ```
 
 ### Multiple Sheets
