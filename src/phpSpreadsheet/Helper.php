@@ -122,7 +122,7 @@ class Helper
             self::$_objSpreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         }
         
-        return new static();
+        return self::resetSheet();
     }
 
     /** 
@@ -144,7 +144,7 @@ class Helper
     {
         self::$_objSheet = NULL;
         self::$_offsetRow = 0;
-        self::$_offsetCol = 1; // A1 => 1
+        self::$_offsetCol = 0; // A1 => 1
 
         return new static();
     }
@@ -252,7 +252,7 @@ class Helper
         $sheetObj = self::validSheetObj();
         
         // Column pointer
-        $posCol = self::$_offsetCol;
+        $posCol = self::$_offsetCol + 1;
 
         // Next row
         self::$_offsetRow++;
@@ -369,6 +369,62 @@ class Helper
     }
 
     /**
+     * Get data of a row from the actived sheet of PhpSpreadsheet
+     * 
+     * @param bool $toString All values from sheet to be string type
+     * @param bool $options [
+     *  row (int) Ended row number
+     *  column (int) Ended column number
+     *  timestamp (bool) Excel datetime to Unixtime
+     *  timestampFormat (string) Format for date() when usgin timestamp
+     *  ]
+     * @param callable $callback($cellValue, int $columnIndex, int $rowIndex)
+     * @return array Data of Spreadsheet
+     */
+    public static function getRow($toString=true, $options=[], callable $callback=null)
+    {
+        $worksheet = self::validSheetObj();
+
+        // Options
+        $defaultOptions = [
+            'columnOffset' => 0,
+            'columns' => NULL,
+            'timestamp' => true,
+            'timestampFormat' => 'Y-m-d H:i:s', // False would use Unixtime
+        ];
+        $options = array_replace($defaultOptions, $options);
+
+        // Calculate the column range of the worksheet
+        $startColumn = ($options['columnOffset']) ?: 0;
+        $columns = ($options['columns']) ?: self::alpha2num($worksheet->getHighestColumn());
+
+        // Next row
+        self::$_offsetRow++;
+
+        // Fetch data from the sheet
+        $data = [];
+        for ($col = $startColumn + 1; $col <= $columns; ++$col) {
+            $cell = $worksheet->getCellByColumnAndRow($col, self::$_offsetRow);
+            $value = $cell->getValue();
+            // Timestamp option
+            if ($options['timestamp'] && \PhpOffice\PhpSpreadsheet\Shared\Date::isDateTime($cell)) {
+                $value = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($value);
+                // Timestamp Format option
+                $value = ($options['timestampFormat']) 
+                    ? date($options['timestampFormat'], $value) : $value;
+            }
+            $value = ($toString) ? (string)$value : $value;
+            // Callback function
+            if ($callback) {
+                $callback($value, $col, self::$_offsetRow);
+            }
+            $data[] = $value;
+        }
+
+        return $data;
+    }
+
+    /**
      * Get rows from the actived sheet of PhpSpreadsheet
      * 
      * @param bool $toString All values from sheet to be string type
@@ -378,43 +434,43 @@ class Helper
      *  timestamp (bool) Excel datetime to Unixtime
      *  timestampFormat (string) Format for date() when usgin timestamp
      *  ]
+     * @param callable $callback($cellValue, int $columnIndex, int $rowIndex)
      * @return array Data of Spreadsheet
      */
-    public static function getRows($toString=true, Array $options=[])
+    public static function getRows($toString=true, Array $options=[], callable $callback=null)
     {
         $worksheet = self::validSheetObj();
 
         // Options
         $defaultOptions = [
-            'row' => NULL,
-            'column' => NULL,
+            'rowOffset' => 0,
+            'rows' => NULL,
+            'columns' => NULL,
             'timestamp' => true,
             'timestampFormat' => 'Y-m-d H:i:s', // False would use Unixtime
         ];
         $options = array_replace($defaultOptions, $options);
 
         // Get the highest row and column numbers referenced in the worksheet
-        $highestRow = ($options['row']) ?: $worksheet->getHighestRow();
-        $highestColumn = ($options['column']) ?: self::alpha2num($worksheet->getHighestColumn());
+        $highestRow = $worksheet->getHighestRow();
+        $rowOffset = ($options['rowOffset'] && $options['rowOffset'] <= $highestRow) 
+            ? $options['rowOffset'] 
+            : 0;
+        $rows = ($options['rows'] && ($rowOffset+$options['rows']) < $highestRow) 
+            ? $options['rows']
+            : $highestRow - $rowOffset;
+        // Enhance performance for each getRow()
+        $options['columns'] = ($options['columns']) ?: self::alpha2num($worksheet->getHighestColumn());
+
+        // Set row offset
+        self::$_offsetRow = $rowOffset;
 
         // Fetch data from the sheet
         $data = [];
         $pointerRow = &$data;
-        for ($row = 1; $row <= $highestRow; ++$row) {
-            $pointerColumn = &$pointerRow[];
-            for ($col = 1; $col <= $highestColumn; ++$col) {
-                $cell = $worksheet->getCellByColumnAndRow($col, $row);
-                $value = $cell->getValue();
-                // Timestamp option
-                if ($options['timestamp'] && \PhpOffice\PhpSpreadsheet\Shared\Date::isDateTime($cell)) {
-                    $value = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($value);
-                    // Timestamp Format option
-                    $value = ($options['timestampFormat']) 
-                        ? date($options['timestampFormat'], $value) : $value;
-                }
-                $value = ($toString) ? (string)$value : $value;
-                $pointerColumn[] = $value;
-            }
+        for ($i=1; $i <= $rows ; $i++) { 
+            
+            $pointerRow[] = self::getRow($toString, $options, $callback);
         }
 
         return $data;
@@ -489,7 +545,7 @@ class Helper
     {
         $sheetObj = self::validSheetObj();
         
-        return self::num2alpha(self::$_offsetCol). '1:'. $sheetObj->getHighestColumn(). $sheetObj->getHighestRow();
+        return self::num2alpha(self::$_offsetCol+1). '1:'. $sheetObj->getHighestColumn(). $sheetObj->getHighestRow();
     }
 
     /**
