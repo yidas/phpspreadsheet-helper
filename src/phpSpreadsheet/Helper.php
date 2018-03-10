@@ -338,7 +338,7 @@ class Helper
     }
 
     /** 
-     * Output an Excel file
+     * Output file to browser
      * 
      * @param string $filename
      * @param string $format
@@ -351,7 +351,7 @@ class Helper
         $objWriter = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($objPhpSpreadsheet, $format);
 
         /**
-         * @todo Type Mapping
+         * Type Mapping
          */
         $inTypeList = isset(self::$_writerTypeInfo[$format]) ? true : false;
         $extension = ($inTypeList) ? self::$_writerTypeInfo[$format]['extension'] : '';
@@ -366,6 +366,32 @@ class Helper
 
         $objWriter->save('php://output');
         exit;
+    }
+
+    /** 
+     * Save as file
+     * 
+     * @param string $filename Support file path
+     * @param string $format
+     * @return string Filepath
+     */
+    public static function save($filename='excel', $format='Xlsx')
+    {
+        $objPhpSpreadsheet = self::validExcelObj();
+
+        // Create Writer first
+        $objWriter = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($objPhpSpreadsheet, $format);
+
+        /**
+         * Type Mapping
+         */
+        $inTypeList = isset(self::$_writerTypeInfo[$format]) ? true : false;
+        $extension = ($inTypeList) ? self::$_writerTypeInfo[$format]['extension'] : '';
+        $filepath = "{$filename}{$extension}";
+
+        // Save file
+        $objWriter->save($filepath);
+        return $filepath;
     }
 
     /**
