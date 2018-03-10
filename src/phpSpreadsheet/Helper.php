@@ -8,7 +8,7 @@ use Exception;
  * PhpSpreadsheet Helper
  * 
  * @author      Nick Tsai <myintaer@gmail.com>
- * @version     1.1.1
+ * @version     1.1.3
  * @filesource 	PhpSpreadsheet <https://github.com/PHPOffice/PhpSpreadsheet>
  * @see         https://github.com/yidas/phpspreadsheet-helper
  * @example
