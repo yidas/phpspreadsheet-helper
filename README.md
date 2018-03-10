@@ -118,7 +118,7 @@ print_r($row1);
 print_r($row2);
 ```
 
-The method which process per each row:
+The method which process per each row ([Example Code](https://github.com/yidas/phpspreadsheet-helper/blob/master/demo/get-row-loop.php)):
 
 ```php
 $helper = \yidas\phpSpreadsheet\Helper::newSpreadsheet($filepath);
