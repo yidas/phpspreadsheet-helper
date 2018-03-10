@@ -20,7 +20,13 @@ OUTLINE
 
 * [USAGE](#usage)
   - [Read & Write](#read--write)
-  - [Add Rows & Get Rows](#add-rows--get-rows)
+    - [save()](#save)
+  - [Get Rows](#get-rows)
+    - [getRow()](#getrow)
+    - [getRows()](#getrows)
+  - [Add Rows](#add-rows)
+    - [addRow()](#addrow)
+    - [addRows()](#addrows)
   - [PhpSpreadsheet Original Usage Injection](#phpspreadsheet-original-usage-injection)
   - [Merge Cells](#merge-cells)
   - [Multiple Sheets](#multiple-sheets)
@@ -85,17 +91,63 @@ USAGE
     ->output();
 ```
 
-### Add Rows & Get Rows
+#### `save()`
 
-|Method   |Description|
-|:--------|:----------|
-|addRow() |Add a row to the actived sheet of PhpSpreadsheet|
-|addRows()|Add rows to the actived sheet of PhpSpreadsheet|
-|getRows()|Get rows from the actived sheet of PhpSpreadsheet|
+Save as file
 
-[Write Example code](#write)
+```php
+\yidas\phpSpreadsheet\Helper::newSpreadsheet()
+    ->addRow(['Add A1'])
+    ->save("/tmp/save");
+// /tmp/save.xlsx
+```
 
-[Read Example code](#read)
+### Get Rows
+
+#### `getRow()`
+
+Get data of a row from the actived sheet of PhpSpreadsheet
+
+```php
+$row1 = \yidas\phpSpreadsheet\Helper::newSpreadsheet($filepath)
+    ->getRow();
+
+$row2 = Helper::getRow();
+
+print_r($row1);
+print_r($row2);
+```
+
+The method which process per each row:
+
+```php
+$helper = \yidas\phpSpreadsheet\Helper::newSpreadsheet($filepath);
+
+while ($row = $helper->getRow()) {
+    // Each row data process
+}
+```
+
+#### `getRows()`
+
+Get rows from the actived sheet of PhpSpreadsheet
+
+[getRows() Example code](#read)
+
+
+### Add Rows
+
+#### `addRow()`
+
+Add a row to the actived sheet of PhpSpreadsheet
+
+[addRow() Example code](#write)
+
+#### `addRows()`
+
+Add rows to the actived sheet of PhpSpreadsheet
+
+[addRows() Example code](#write)
 
 
 ### PhpSpreadsheet Original Usage Injection

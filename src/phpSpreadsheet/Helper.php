@@ -427,6 +427,11 @@ class Helper
         // Next row
         self::$_offsetRow++;
 
+        // Check if exceed highest row by PHPSpreadsheet cachedHighestRow
+        if (self::$_offsetRow > $worksheet->getHighestRow()) {
+            return [];
+        }
+
         // Fetch data from the sheet
         $data = [];
         for ($col = $startColumn + 1; $col <= $columns; ++$col) {
