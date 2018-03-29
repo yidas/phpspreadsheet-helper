@@ -622,7 +622,7 @@ class Helper
     {
         $sheetObj = self::validSheetObj();
 
-        $colStart = ($colAlphaStart) ? self::alpha2num($colAlphaStart) : self::$_offsetCol;
+        $colStart = ($colAlphaStart) ? self::alpha2num($colAlphaStart) : self::$_offsetCol + 1;
         $colEnd = ($colAlphaEnd) 
             ? self::alpha2num($colAlphaEnd) 
             : self::alpha2num($sheetObj->getHighestColumn());
