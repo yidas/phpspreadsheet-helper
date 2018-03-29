@@ -8,7 +8,7 @@ use Exception;
  * PhpSpreadsheet Helper
  * 
  * @author      Nick Tsai <myintaer@gmail.com>
- * @version     1.1.3
+ * @version     1.1.4
  * @filesource 	PhpSpreadsheet <https://github.com/PHPOffice/PhpSpreadsheet>
  * @see         https://github.com/yidas/phpspreadsheet-helper
  * @example
@@ -387,7 +387,11 @@ class Helper
          */
         $inTypeList = isset(self::$_writerTypeInfo[$format]) ? true : false;
         $extension = ($inTypeList) ? self::$_writerTypeInfo[$format]['extension'] : '';
-        $filepath = "{$filename}{$extension}";
+        
+        // Check if filename contained extension
+        $filepath = (stripos($filename, $extension)===(strlen($filename)-strlen($extension)))
+            ? $filename 
+            : "{$filename}{$extension}";
 
         // Save file
         $objWriter->save($filepath);
