@@ -8,7 +8,7 @@ use Exception;
  * PhpSpreadsheet Helper
  * 
  * @author      Nick Tsai <myintaer@gmail.com>
- * @version     1.1.4
+ * @version     1.1.5
  * @filesource 	PhpSpreadsheet <https://github.com/PHPOffice/PhpSpreadsheet>
  * @see         https://github.com/yidas/phpspreadsheet-helper
  * @example
@@ -263,6 +263,7 @@ class Helper
             if (is_array($value)) {
                 
                 // Options
+                $width = isset($value['width']) ? $value['width'] : NULL;
                 $colspan = isset($value['col']) ? $value['col'] : 1;
                 $rowspan = isset($value['row']) ? $value['row'] : 1;
                 $skip = isset($value['skip']) ? $value['skip'] : 1;
@@ -270,6 +271,12 @@ class Helper
                 $value = isset($value['value']) ? $value['value'] : NULL;
 
                 $sheetObj->setCellValueByColumnAndRow($posCol, self::$_offsetRow, $value);
+
+                // Setting the column's width
+                if ($width) {
+                    
+                    $sheetObj->getColumnDimension(self::num2alpha($posCol))->setWidth($width);
+                }
 
                 // Merge handler
                 if ($colspan>1 || $rowspan>1) {

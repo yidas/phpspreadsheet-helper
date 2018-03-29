@@ -31,6 +31,7 @@ OUTLINE
   - [Merge Cells](#merge-cells)
   - [Multiple Sheets](#multiple-sheets)
   - [Map of Coordinates & Ranges](#multiple-sheets)
+  - [Columns Format](#columns-format)
   - [Cells Format](#cells-format)
 
 ---
@@ -293,10 +294,26 @@ sn range: A1:A2
 All range: A1:E4
 ```
 
+### Columns Format
+
+The options for each cell data:
+
+* `width`: setWidth() for the column
+
+```php
+\yidas\phpSpreadsheet\Helper::newSpreadsheet()
+    ->addRow([['value'=>'ID', 'width'=>10], ['value'=>'Name', 'width'=>25], ['value'=>'Email', 'width'=>50]])
+    ->addRows([
+        ['1', 'Nick','myintaer@gmail.com'],
+        ['2', 'Eric','eric@.....'],
+    ])
+    ->output('My Excel'); 
+```
+
 ### Cells Format
 
-* setWrapText(): Set to all cells by default
-* setAutoSize(): Set to all cells(columns) by default
+* `setWrapText()`: Set to all cells by default
+* `setAutoSize()`: Set to all cells(columns) by default
 
 ```php
 \yidas\phpSpreadsheet\Helper::newSpreadsheet()
