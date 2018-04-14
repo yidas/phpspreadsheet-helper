@@ -8,7 +8,7 @@ use Exception;
  * PhpSpreadsheet Helper
  * 
  * @author      Nick Tsai <myintaer@gmail.com>
- * @version     1.1.6
+ * @version     1.1.7
  * @filesource 	PhpSpreadsheet <https://github.com/PHPOffice/PhpSpreadsheet>
  * @see         https://github.com/yidas/phpspreadsheet-helper
  * @example
@@ -102,8 +102,15 @@ class Helper
         ],
     ];
 
+    /**
+     * Invalid characters in sheet title.
+     *
+     * @var array
+     */
+    private static $_invalidCharacters = ['*', ':', '/', '\\', '?', '[', ']'];
+
     /** 
-     * New or set an PhpSpreadsheet object
+     * New or load an PhpSpreadsheet object
      * 
      * @param object|string $phpSpreadsheet PhpSpreadsheet object or filepath
      * @return self
@@ -154,9 +161,10 @@ class Helper
      * 
      * @param object|int $sheet PhpSpreadsheet sheet object or index number
      * @param string $title Sheet title
+     * @param bool $normalizeTitle Auto-normalize title rule 
      * @return self
      */
-    public static function setSheet($sheet=0, $title=NULL)
+    public static function setSheet($sheet=0, $title=NULL, $normalizeTitle=false)
     {
         self::resetSheet();
 
@@ -182,6 +190,17 @@ class Helper
 
         // Sheet Title
         if ($title) {
+            // Auto-normalize title rule 
+            if ($normalizeTitle) {
+                /**
+                 * @see PhpOffice\PhpSpreadsheet\Worksheet\Worksheet
+                 */
+                // Some of the printable ASCII characters are invalid:  * : / \ ? [ ]
+                $title = str_replace(self::$_invalidCharacters, '', $title);
+                // Maximum 31 characters allowed for sheet title
+                $title = mb_substr($title, 0, 31);
+            }
+
             self::$_objSheet->setTitle($title);
         }
 

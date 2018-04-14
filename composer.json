@@ -7,7 +7,7 @@
     "license": "MIT",
     "support": {
         "issues": "https://github.com/yidas/phpspreadsheet-helper/issues",
-        "source": "https://github.com/yidas/phpspreadsheet-helperp"
+        "source": "https://github.com/yidas/phpspreadsheet-helper"
     },
     "minimum-stability": "stable",
     "require": {

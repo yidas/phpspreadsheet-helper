@@ -20,6 +20,8 @@ OUTLINE
 
 * [USAGE](#usage)
   - [Read & Write](#read--write)
+    - [newSpreadsheet()](#newspreadsheet)
+    - [output()](#output)
     - [save()](#save)
   - [Get Rows](#get-rows)
     - [getRow()](#getrow)
@@ -30,6 +32,7 @@ OUTLINE
   - [PhpSpreadsheet Original Usage Injection](#phpspreadsheet-original-usage-injection)
   - [Merge Cells](#merge-cells)
   - [Multiple Sheets](#multiple-sheets)
+    - [setSheet()](#setsheet)
   - [Map of Coordinates & Ranges](#multiple-sheets)
   - [Columns Format](#columns-format)
   - [Cells Format](#cells-format)
@@ -40,6 +43,8 @@ DEMONSTRATION
 -------------
 
 ### Write
+
+Output an Excel file to browser for download:
 
 ```php
 \yidas\phpSpreadsheet\Helper::newSpreadsheet()
@@ -86,11 +91,21 @@ USAGE
 
 ### Read & Write
 
+Simpliy read an Excel file then output to browser:
+
 ```php
 \yidas\phpSpreadsheet\Helper::newSpreadsheet('/tmp/excel.xlsx')
     ->addRow(['Modified A1'])
     ->output();
 ```
+
+#### `newSpreadsheet()`
+
+New or load an PhpSpreadsheet object
+
+#### `output()`
+
+Output file to browser
 
 #### `save()`
 
@@ -211,6 +226,10 @@ Helper::output();
 
 ### Multiple Sheets
 
+#### `setSheet()`
+
+Set an active PhpSpreadsheet Sheet
+
 ```php
 use \yidas\phpSpreadsheet\Helper;
 
@@ -220,11 +239,17 @@ Helper::newSpreadsheet()
     ->addRows([
         ['1', 'Nick'],
     ]);
-// Set another sheet object and switch to it    
+// Set another sheet object  
 Helper::setSheet(1, '2nd Sheet')
     ->addRow(['SN', 'Title'])
     ->addRows([
         ['1', 'Foo'],
+    ]);
+// Set a sheet with the title which has been auto-nomalizing
+Helper::setSheet(2, '*This [sheet] name has been auto-nomalizing', true)
+    ->addRow(['ID', 'Text'])
+    ->addRows([
+        ['1', 'Bar'],
     ]);
 
 Helper::output('MultiSheets');
