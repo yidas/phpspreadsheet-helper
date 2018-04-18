@@ -16,7 +16,7 @@ Helper::setSheet(1, '2nd Sheet')
     ->addRows([
         ['1', 'Foo'],
     ]);
-// Set a sheet with the title which has been auto-nomalizing
+// Set a sheet with the title which has been auto-normalized
 Helper::setSheet(2, '*This [sheet] name has been auto-nomalizing', true)
     ->addRow(['ID', 'Text'])
     ->addRows([
