@@ -15,9 +15,7 @@ OUTLINE
 -------
 
 * [DEMONSTRATION](#demonstration)
-
 * [INSTALLATION](#installation)
-
 * [USAGE](#usage)
   - [Read & Write](#read--write)
     - [newSpreadsheet()](#newspreadsheet)
@@ -235,25 +233,28 @@ use \yidas\phpSpreadsheet\Helper;
 
 Helper::newSpreadsheet()
     ->setSheet(0, 'First Sheet')
-    ->addRow(['ID', 'Name'])
+    ->addRow(['Sheet Index', 'Sheet Count'])
     ->addRows([
-        ['1', 'Nick'],
+        [Helper::getActiveSheetIndex(), Helper::getSheetCount()],
     ]);
 // Set another sheet object  
 Helper::setSheet(1, '2nd Sheet')
-    ->addRow(['SN', 'Title'])
+    ->addRow(['Sheet Index', 'Sheet Count'])
     ->addRows([
-        ['1', 'Foo'],
+        [Helper::getActiveSheetIndex(), Helper::getSheetCount()],
     ]);
-// Set a sheet with the title which has been auto-nomalizing
+// Set a sheet with the title which has been auto-normalized
 Helper::setSheet(2, '*This [sheet] name has been auto-nomalizing', true)
-    ->addRow(['ID', 'Text'])
-    ->addRows([
-        ['1', 'Bar'],
-    ]);
+->addRow(['Sheet Index', 'Sheet Count'])
+->addRows([
+    [Helper::getActiveSheetIndex(), Helper::getSheetCount()],
+]);
 
 Helper::output('MultiSheets');
 ```
+
+* `getActiveSheetIndex()`: Get active sheet index
+* `getSheetCount()`: Get sheet count
 
 ### Map of Coordinates & Ranges
 

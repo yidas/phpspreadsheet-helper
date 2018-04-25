@@ -207,6 +207,26 @@ class Helper
         return new static();
     }
 
+    /**
+     * Get sheet count
+     *
+     * @return int Count of sheets
+     */
+    public static function getSheetCount()
+    {
+        return self::$_objSpreadsheet->getSheetCount();
+    }
+
+    /**
+     * Get active sheet index
+     * 
+     * @return int Index of active sheet
+     */
+    public static function getActiveSheetIndex()
+    {
+        return self::$_objSpreadsheet->getActiveSheetIndex();
+    }
+
     /** 
      * Get PhpSpreadsheet Sheet object from cache
      * 
