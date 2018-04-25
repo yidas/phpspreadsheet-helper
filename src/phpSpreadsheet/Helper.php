@@ -237,7 +237,7 @@ class Helper
      */
     public static function getRowOffset()
     {
-        return self::$_offsetCol;
+        return self::$_offsetRow;
     }
 
     /** 
