@@ -184,6 +184,10 @@ class Helper
             // Select sheet
             self::$_objSheet = self::$_objSpreadsheet->setActiveSheetIndex($sheet);
         }
+        elseif (is_null($sheet) && self::$_objSpreadsheet) {
+            // Auto create a sheet without index
+            self::setSheet(self::getSheetCount());
+        }
         else {
             throw new Exception("Invalid or empty PhpSpreadsheet Object for setting sheet", 400);
         }
@@ -207,6 +211,46 @@ class Helper
         return new static();
     }
 
+    /** 
+     * Get PhpSpreadsheet Sheet object from cache
+     * 
+     * @param int|string $identity Sheet index or name
+     * @param bool $autoCreate 
+     * @return object PhpSpreadsheet Sheet object
+     */
+    public static function getSheet($identity=null, $autoCreate=false)
+    {
+        // Deafult is get active sheet
+        if (!$identity) {
+            
+            return self::$_objSheet;
+        }
+
+        // Giving $identity situation
+        if (is_numeric($identity)) {
+            
+            $objSheet = self::$_objSpreadsheet->getSheet($identity);
+            // Auto create if not exist
+            if (!$objSheet && $autoCreate) {
+                // Create a new sheet by index
+                $objSheet = self::setSheet($identity)
+                    ->getSheet();
+            }
+        }
+        elseif (is_string($identity)) {
+            
+            $objSheet = self::$_objSpreadsheet->getSheetByName($identity);
+            // Auto create if not exist
+            if (!$objSheet && $autoCreate) {
+                // Create a new sheet by name
+                $objSheet = self::setSheet(null, $identity, true)
+                    ->getSheet();
+            }
+        }
+
+        return $objSheet;
+    }
+
     /**
      * Get sheet count
      *
@@ -225,16 +269,6 @@ class Helper
     public static function getActiveSheetIndex()
     {
         return self::$_objSpreadsheet->getActiveSheetIndex();
-    }
-
-    /** 
-     * Get PhpSpreadsheet Sheet object from cache
-     * 
-     * @return object PhpSpreadsheet Sheet object
-     */
-    public static function getSheet()
-    {
-        return self::$_objSheet;
     }
 
     /** 

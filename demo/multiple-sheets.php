@@ -10,14 +10,16 @@ Helper::newSpreadsheet()
     ->addRows([
         [Helper::getActiveSheetIndex(), Helper::getSheetCount()],
     ]);
-// Set another sheet object  
-Helper::setSheet(1, '2nd Sheet')
+// Set another sheet object without giving index 
+Helper::setSheet(null, '2nd Sheet')
     ->addRow(['Sheet Index', 'Sheet Count'])
     ->addRows([
         [Helper::getActiveSheetIndex(), Helper::getSheetCount()],
     ]);
+// Get a sheet which does not exsit with auto creating it  
+$obj = Helper::getSheet('3nd Sheet', true);
 // Set a sheet with the title which has been auto-normalized
-Helper::setSheet(2, '*This [sheet] name has been auto-nomalizing', true)
+Helper::setSheet(null, '*This [sheet] name has been auto-nomalizing', true)
     ->addRow(['Sheet Index', 'Sheet Count'])
     ->addRows([
         [Helper::getActiveSheetIndex(), Helper::getSheetCount()],

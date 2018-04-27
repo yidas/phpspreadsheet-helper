@@ -31,6 +31,7 @@ OUTLINE
   - [Merge Cells](#merge-cells)
   - [Multiple Sheets](#multiple-sheets)
     - [setSheet()](#setsheet)
+    - [getSheet()](#getsheet)
   - [Map of Coordinates & Ranges](#multiple-sheets)
   - [Columns Format](#columns-format)
   - [Cells Format](#cells-format)
@@ -229,6 +230,20 @@ Helper::output();
 Set an active PhpSpreadsheet Sheet
 
 ```php
+object setSheet([$sheet] [,$title] [,$normalizeTitle])
+```
+
+#### `getSheet()`
+
+Get PhpSpreadsheet Sheet object from cache
+
+```php
+object getSheet([$identity] [,$autoCreate])`
+```
+
+Sample code:
+
+```php
 use \yidas\phpSpreadsheet\Helper;
 
 Helper::newSpreadsheet()
@@ -237,14 +252,16 @@ Helper::newSpreadsheet()
     ->addRows([
         [Helper::getActiveSheetIndex(), Helper::getSheetCount()],
     ]);
-// Set another sheet object  
-Helper::setSheet(1, '2nd Sheet')
+// Set another sheet object without giving index 
+Helper::setSheet(null, '2nd Sheet')
     ->addRow(['Sheet Index', 'Sheet Count'])
     ->addRows([
         [Helper::getActiveSheetIndex(), Helper::getSheetCount()],
     ]);
+// Get a sheet which does not exsit with auto creating it  
+$obj = Helper::getSheet('3nd Sheet', true);
 // Set a sheet with the title which has been auto-normalized
-Helper::setSheet(2, '*This [sheet] name has been auto-nomalizing', true)
+Helper::setSheet(null, '*This [sheet] name has been auto-nomalizing', true)
     ->addRow(['Sheet Index', 'Sheet Count'])
     ->addRows([
         [Helper::getActiveSheetIndex(), Helper::getSheetCount()],
