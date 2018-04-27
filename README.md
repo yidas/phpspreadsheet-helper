@@ -245,10 +245,10 @@ Helper::setSheet(1, '2nd Sheet')
     ]);
 // Set a sheet with the title which has been auto-normalized
 Helper::setSheet(2, '*This [sheet] name has been auto-nomalizing', true)
-->addRow(['Sheet Index', 'Sheet Count'])
-->addRows([
-    [Helper::getActiveSheetIndex(), Helper::getSheetCount()],
-]);
+    ->addRow(['Sheet Index', 'Sheet Count'])
+    ->addRows([
+        [Helper::getActiveSheetIndex(), Helper::getSheetCount()],
+    ]);
 
 Helper::output('MultiSheets');
 ```
