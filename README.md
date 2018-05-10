@@ -14,9 +14,10 @@ This library is a helper that encapsulate [PhpSpreadsheet](https://github.com/PH
 OUTLINE
 -------
 
-* [DEMONSTRATION](#demonstration)
-* [INSTALLATION](#installation)
-* [USAGE](#usage)
+* [Demonstration](#demonstration)
+* [Installation](#installation)
+* [Requirements](#requirements)
+* [Usage](#usage)
   - [Read & Write](#read--write)
     - [newSpreadsheet()](#newspreadsheet)
     - [output()](#output)
@@ -41,7 +42,7 @@ OUTLINE
 DEMONSTRATION
 -------------
 
-### Write
+### Write to Excel
 
 Output an Excel file to browser for download:
 
@@ -55,7 +56,7 @@ Output an Excel file to browser for download:
     ->output('My Excel');
 ```
 
-## Read
+### Read from Excel
 
 ```php
 $data = \yidas\phpSpreadsheet\Helper::newSpreadsheet('/tmp/excel.xlsx')
@@ -65,6 +66,19 @@ print_r($data);
 ```
 
 Return two-dimensional array data contained rows > columns spread sheet.
+
+---
+
+REQUIREMENTS
+------------
+
+This library requires the following:
+
+- Dependent on [PhpSpreadsheet](https://phpspreadsheet.readthedocs.io/en/develop/#software-requirements)
+  - PHP 5.6.0+
+  - PHP extension php-zip enabled
+  - PHP extension php-xml enabled
+  - PHP extension php-gd2 enabled (if not compiled in)
 
 ---
 
@@ -98,17 +112,29 @@ Simpliy read an Excel file then output to browser:
     ->output();
 ```
 
-#### `newSpreadsheet()`
+#### newSpreadsheet()
 
 New or load an PhpSpreadsheet object
 
-#### `output()`
+```php
+public static array newSpreadsheet(object|string $spreadSheet=null)
+```
+
+#### output()
 
 Output file to browser
 
-#### `save()`
+```php
+public static void output($filename='excel', $format='Xlsx')
+```
+
+#### save()
 
 Save as file
+
+```php
+public static string save($filename='excel', $format='Xlsx')
+```
 
 ```php
 \yidas\phpSpreadsheet\Helper::newSpreadsheet()
@@ -119,12 +145,18 @@ Save as file
 
 ### Get Rows
 
-#### `getRow()`
+#### getRow()
 
 Get data of a row from the actived sheet of PhpSpreadsheet
 
 ```php
-$row1 = \yidas\phpSpreadsheet\Helper::newSpreadsheet($filepath)
+public static array getRow($toString=true, $options=[], callable $callback=null)
+```
+
+```php
+use \yidas\phpSpreadsheet\Helper;
+
+$row1 = Helper::newSpreadsheet($filepath)
     ->getRow();
 
 $row2 = Helper::getRow();
@@ -143,24 +175,36 @@ while ($row = $helper->getRow()) {
 }
 ```
 
-#### `getRows()`
+#### getRows()
 
 Get rows from the actived sheet of PhpSpreadsheet
 
-[getRows() Example code](#read)
+```php
+public static array getRows($toString=true, Array $options=[], callable $callback=null)
+```
+
+[getRows() Example code](#read-from-excel)
 
 
 ### Add Rows
 
-#### `addRow()`
+#### addRow()
 
 Add a row to the actived sheet of PhpSpreadsheet
 
-[addRow() Example code](#write)
+```php
+public static self addRow($rowData)
+```
 
-#### `addRows()`
+[addRow() Example code](#write-to-excel)
+
+#### addRows()
 
 Add rows to the actived sheet of PhpSpreadsheet
+
+```php
+public static self addRows($data)
+```
 
 [addRows() Example code](#write)
 
@@ -173,10 +217,12 @@ $objSpreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet;
 $objSpreadsheet->getProperties()
     ->setCreator("Nick Tsai")
     ->setTitle("Office 2007 XLSX Document");
+    
 // Get the actived sheet object from PhpSpreadsheet
 $objSheet = $objSpreadsheet->setActiveSheetIndex(0);
 $objSheet->setTitle('Sheet');
 $objSheet->setCellValue('A1', 'SN');
+
 // Inject PhpSpreadsheet Object and Sheet Object to Helper
 \yidas\phpSpreadsheet\Helper::newSpreadsheet($objSpreadsheet)
     ->setSheet($objSheet)
@@ -184,9 +230,8 @@ $objSheet->setCellValue('A1', 'SN');
     ->addRows([
         ['1'],
         ['2'],
-    ]);
-    
-\yidas\phpSpreadsheet\Helper::output();
+    ])
+    ->output();
 ```
 
 ```php
@@ -195,11 +240,13 @@ use \yidas\phpSpreadsheet\Helper;
 Helper::newSpreadsheet()
     ->setSheet(0, 'Sheet')
     ->addRow(['SN']);
+    
 // Get the PhpSpreadsheet object created by Helper
 $objSpreadsheet = Helper::getSpreadsheet();
 $objSpreadsheet->getProperties()
     ->setCreator("Nick Tsai")
     ->setTitle("Office 2007 XLSX Document");
+    
 // Get the actived sheet object created by Helper
 $objSheet = Helper::getSheet();
 $objSheet->setCellValue('A2', '1');
@@ -225,20 +272,20 @@ Helper::output();
 
 ### Multiple Sheets
 
-#### `setSheet()`
+#### setSheet()
 
 Set an active PhpSpreadsheet Sheet
 
 ```php
-object setSheet([$sheet] [,$title] [,$normalizeTitle])
+public static self setSheet($sheet=0, $title=NULL, $normalizeTitle=false)
 ```
 
-#### `getSheet()`
+#### getSheet()
 
 Get PhpSpreadsheet Sheet object from cache
 
 ```php
-object getSheet([$identity] [,$autoCreate])`
+public static object getSheet($identity=null, $autoCreate=false)
 ```
 
 Sample code:
@@ -252,14 +299,17 @@ Helper::newSpreadsheet()
     ->addRows([
         [Helper::getActiveSheetIndex(), Helper::getSheetCount()],
     ]);
+    
 // Set another sheet object without giving index 
 Helper::setSheet(null, '2nd Sheet')
     ->addRow(['Sheet Index', 'Sheet Count'])
     ->addRows([
         [Helper::getActiveSheetIndex(), Helper::getSheetCount()],
     ]);
+    
 // Get a sheet which does not exsit with auto creating it  
 $obj = Helper::getSheet('3nd Sheet', true);
+
 // Set a sheet with the title which has been auto-normalized
 Helper::setSheet(null, '*This [sheet] name has been auto-nomalizing', true)
     ->addRow(['Sheet Index', 'Sheet Count'])
