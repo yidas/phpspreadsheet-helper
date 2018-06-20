@@ -2,9 +2,11 @@
 
 require __DIR__ . '/_config.php';
 
+use \yidas\phpSpreadsheet\Helper;
+
 $filepath = __DIR__ . '/import.xlsx';
 
-$row1 = \yidas\phpSpreadsheet\Helper::newSpreadsheet($filepath)
+$row1 = Helper::newSpreadsheet($filepath)
     ->getRow();
 
 $row2 = Helper::getRow();
