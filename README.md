@@ -1,7 +1,7 @@
 PHPSpreadsheet Helper
 ======================
 
-PHP Excel Helper - Read, Create and Write Spreadsheet with easy way based on PhpSpreadsheet
+PHP Excel Helper - Write and read Spreadsheet with easy way based on PhpSpreadsheet
 
 [![Latest Stable Version](https://poser.pugx.org/yidas/phpspreadsheet-helper/v/stable?format=flat-square)](https://packagist.org/packages/yidas/phpspreadsheet-helper)
 [![Latest Unstable Version](https://poser.pugx.org/yidas/phpspreadsheet-helper/v/unstable?format=flat-square)](https://packagist.org/packages/yidas/phpspreadsheet-helper)
