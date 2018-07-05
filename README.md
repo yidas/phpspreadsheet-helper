@@ -18,7 +18,7 @@ OUTLINE
 * [Installation](#installation)
 * [Requirements](#requirements)
 * [Usage](#usage)
-  - [Read & Write](#read--write)
+  - [Import & Export](#import--export)
     - [newSpreadsheet()](#newspreadsheet)
     - [output()](#output)
     - [save()](#save)
@@ -28,7 +28,9 @@ OUTLINE
   - [Add Rows](#add-rows)
     - [addRow()](#addrow)
     - [addRows()](#addrows)
-  - [PhpSpreadsheet Original Usage Injection](#phpspreadsheet-original-usage-injection)
+  - [PhpSpreadsheet Original Usage Integration](#phpspreadsheet-original-usage-integration)
+    - [Inject PhpSpreadsheet](#inject-phpspreadsheet)
+    - [Extract PhpSpreadsheet](#extract-phpspreadsheet)
   - [Merge Cells](#merge-cells)
   - [Multiple Sheets](#multiple-sheets)
     - [setSheet()](#setsheet)
@@ -133,7 +135,7 @@ require __DIR__ . '/vendor/autoload.php';
 USAGE
 -----
 
-### Read & Write
+### Import & Export
 
 Simpliy read an Excel file then output to browser:
 
@@ -156,16 +158,20 @@ public static array newSpreadsheet(object|string $spreadSheet=null)
 Output file to browser
 
 ```php
-public static void output($filename='excel', $format='Xlsx')
+public static void output(string $filename='excel', string $format='Xlsx')
 ```
+
+*`$format` list: `Xlsx`, `Xls`, `Html`, `Csv`, `Ods`*
 
 #### save()
 
 Save as file
 
 ```php
-public static string save($filename='excel', $format='Xlsx')
+public static string save(string $filename='excel', string $format='Xlsx')
 ```
+
+*Example:*
 
 ```php
 \yidas\phpSpreadsheet\Helper::newSpreadsheet()
@@ -181,8 +187,10 @@ public static string save($filename='excel', $format='Xlsx')
 Get data of a row from the actived sheet of PhpSpreadsheet
 
 ```php
-public static array getRow($toString=true, $options=[], callable $callback=null)
+public static array getRow(boolean $toString=true, array $options=[], callable $callback=null)
 ```
+
+*Example:*
 
 ```php
 use \yidas\phpSpreadsheet\Helper;
@@ -196,7 +204,7 @@ print_r($row1);
 print_r($row2);
 ```
 
-The method which process per each row ([Example Code](https://github.com/yidas/phpspreadsheet-helper/blob/master/demo/get-row-loop.php)):
+*Example of fetching content per each row ([Example Code](https://github.com/yidas/phpspreadsheet-helper/blob/master/demo/get-row-loop.php)):*
 
 ```php
 $helper = \yidas\phpSpreadsheet\Helper::newSpreadsheet($filepath);
@@ -211,10 +219,10 @@ while ($row = $helper->getRow()) {
 Get rows from the actived sheet of PhpSpreadsheet
 
 ```php
-public static array getRows($toString=true, Array $options=[], callable $callback=null)
+public static array getRows(boolean $toString=true, array $options=[], callable $callback=null)
 ```
 
-[getRows() Example code](#read-from-excel)
+*[Example of getRows()](#read-from-excel)*
 
 
 ### Add Rows
@@ -224,23 +232,41 @@ public static array getRows($toString=true, Array $options=[], callable $callbac
 Add a row to the actived sheet of PhpSpreadsheet
 
 ```php
-public static self addRow($rowData)
+public static self addRow(array $rowData)
 ```
 
-[addRow() Example code](#write-to-excel)
+*`$rowData` value: string or array of attributes for a cell*
+
+  - attributes: `key`, `value`, [`col`](#merge-cells), [`row`](#merge-cells), [`skip`](#merge-cells),  [`width`](#columns-format)
+
+*[Example of addRow()](#write-to-excel)*
+
+*Example of setting attributes for each cell:*
+
+```php
+\yidas\phpSpreadsheet\Helper::newSpreadsheet()
+    ->addRow([['value'=>'ID'], ['value'=>'Name'], ['value'=>'Email']])
+    ->addRow(['ID', 'Name', 'Email']);
+```
 
 #### addRows()
 
 Add rows to the actived sheet of PhpSpreadsheet
 
 ```php
-public static self addRows($data)
+public static self addRows(array $data)
 ```
 
-[addRows() Example code](#write)
+*`$data` value: array of each $rowData from `addRow()`*
+
+*[Example of addRows()](#write-to-excel)*
 
 
-### PhpSpreadsheet Original Usage Injection
+### PhpSpreadsheet Original Usage Integration
+
+This helper is flexible that you could inject or extract original PhpSpreadsheet with it, when you need to manipulate some Phpspreadsheet methods integrated with Helper.
+
+#### Inject PhpSpreadsheet
 
 ```php
 // Get a new PhpSpreadsheet object
@@ -265,6 +291,8 @@ $objSheet->setCellValue('A1', 'SN');
     ->output();
 ```
 
+#### Extract PhpSpreadsheet
+
 ```php
 use \yidas\phpSpreadsheet\Helper;
 
@@ -287,6 +315,12 @@ Helper::output();
 ```
 
 ### Merge Cells
+
+It's easy to merge cells by defining each cell's span attributes:
+
+- `row` : Number of rowspan cells to merge with  
+- `col` : Number of colspan cells to merge with  
+- `skip` : Number of colspan cells to merge with  
 
 ```php
 \yidas\phpSpreadsheet\Helper::newSpreadsheet()
@@ -319,7 +353,7 @@ Get PhpSpreadsheet Sheet object from cache
 public static object getSheet($identity=null, $autoCreate=false)
 ```
 
-Sample code:
+*Example:*
 
 ```php
 use \yidas\phpSpreadsheet\Helper;

@@ -1,6 +1,6 @@
 {
     "name": "yidas/phpspreadsheet-helper",
-    "description": "PHP Excel Helper - Read, Create and Write Spreadsheet with easy way based on PhpSpreadsheet",
+    "description": "PHP Excel Helper - Write and read Spreadsheet with easy way based on PhpSpreadsheet",
     "keywords": ["PhpSpreadsheet", "PHPExcel", "php", "excel", "sheet", "PhpSpreadsheet helper"],
     "homepage": "https://github.com/yidas/phpspreadsheet-helper",
     "type": "library",
