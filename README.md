@@ -56,16 +56,47 @@ Output an Excel file to browser for download:
     ->output('My Excel');
 ```
 
+<img src="https://raw.githubusercontent.com/yidas/phpspreadsheet-helper/master/img/demonstration.png" /> 
+
 ### Read from Excel
 
+Import above excel file and return two-dimensional array data contained rows > columns spread sheet:
+
 ```php
-$data = \yidas\phpSpreadsheet\Helper::newSpreadsheet('/tmp/excel.xlsx')
+$data = \yidas\phpSpreadsheet\Helper::newSpreadsheet('/tmp/My Excel.xlsx')
     ->getRows();
     
 print_r($data);
 ```
 
-Return two-dimensional array data contained rows > columns spread sheet.
+Output result:
+
+```
+Array
+(
+    [0] => Array
+        (
+            [0] => ID
+            [1] => Name
+            [2] => Email
+        )
+
+    [1] => Array
+        (
+            [0] => 1
+            [1] => Nick
+            [2] => myintaer@gmail.com
+        )
+
+    [2] => Array
+        (
+            [0] => 2
+            [1] => Eric
+            [2] => eric@.....
+        )
+
+)
+```
 
 ---
 
