@@ -36,6 +36,7 @@ OUTLINE
     - [setSheet()](#setsheet)
     - [getSheet()](#getsheet)
   - [Map of Coordinates & Ranges](#multiple-sheets)
+  - [Cell Style](#cell-style)
   - [Columns Format](#columns-format)
   - [Cells Format](#cells-format)
 
@@ -451,6 +452,39 @@ sn start row: 1
 sn range: A1:A2
 All range: A1:E4
 ```
+
+### Cell Style
+
+The style attribute for each cell data:
+
+* `style`: applyFromArray for the cell
+
+```php
+\yidas\phpSpreadsheet\Helper::newSpreadsheet()
+    ->addRow(['Percentage', '10%', 
+        ['value'=>'content', 'style'=> 
+            [
+                'font' => [
+                    'bold' => true,
+                    'color' => ['argb' => 'FFFF0000']
+                ],
+                'alignment' => ['horizontal' => 'right'],
+                'borders' => [
+                    'top' => ['borderStyle' => 'thin'],
+                ],
+                'fill' => [
+                    'fillType' => 'linear',
+                    'rotation' => 90,
+                    'startColor' => ['argb' => 'FFA0A0A0'],
+                    'endColor' => ['argb' => 'FFFFFFFF'],
+                ],
+            ]
+        ]
+    ])
+    ->output();
+```
+
+> Style array key/value/constant refers [Style Classes](https://github.com/PHPOffice/PhpSpreadsheet/tree/develop/src/PhpSpreadsheet/Style)
 
 ### Columns Format
 
