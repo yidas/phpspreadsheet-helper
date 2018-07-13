@@ -330,25 +330,39 @@ class Helper
         // Next row
         self::$_offsetRow++;
         
-        foreach ($rowData as $key => $value) {
+        foreach ($rowData as $key => $cell) {
             
-            // Optional Cell
-            if (is_array($value)) {
+            // Attribute defining Cell
+            if (is_array($cell)) {
                 
-                // Options
-                $width = isset($value['width']) ? $value['width'] : NULL;
-                $colspan = isset($value['col']) ? $value['col'] : 1;
-                $rowspan = isset($value['row']) ? $value['row'] : 1;
-                $skip = isset($value['skip']) ? $value['skip'] : 1;
-                $key = isset($value['key']) ? $value['key'] : NULL;
-                $value = isset($value['value']) ? $value['value'] : NULL;
+                // Basic attributes
+                $key = isset($cell['key']) ? $cell['key'] : NULL;
+                $value = isset($cell['value']) ? $cell['value'] : NULL;
+                // Merging
+                $colspan = isset($cell['col']) ? $cell['col'] : 1;
+                $rowspan = isset($cell['row']) ? $cell['row'] : 1;
+                $skip = isset($cell['skip']) ? $cell['skip'] : 1;
+                // Cell Format
+                $width = isset($cell['width']) ? $cell['width'] : NULL;
+                $style = isset($cell['style']) ? $cell['style'] : NULL;
 
+                // Cached column alpha
+                $colAlpha = self::num2alpha($posCol);
+
+                // Set value
                 $sheetObj->setCellValueByColumnAndRow($posCol, self::$_offsetRow, $value);
 
                 // Setting the column's width
                 if ($width) {
                     
-                    $sheetObj->getColumnDimension(self::num2alpha($posCol))->setWidth($width);
+                    $sheetObj->getColumnDimension($colAlpha)->setWidth($width);
+                }
+
+                // Setting applyFromArray
+                if ($style) {
+                    
+                    $sheetObj->getStyle($colAlpha.self::$_offsetRow)
+                        ->applyFromArray($style);
                 }
 
                 // Merge handler
@@ -364,7 +378,7 @@ class Helper
 
                 // Save key Map
                 if ($key) {
-                    $startColumn = self::num2alpha($posCol);
+                    $startColumn = $colAlpha;
                     $startCoordinate = $startColumn. self::$_offsetRow;
                     // Range Map
                     if (isset($mergeVal)) {
@@ -392,7 +406,7 @@ class Helper
 
             } else {
 
-                $sheetObj->setCellValueByColumnAndRow($posCol, self::$_offsetRow, $value);
+                $sheetObj->setCellValueByColumnAndRow($posCol, self::$_offsetRow, $cell);
                 
                 $posCol++;
             }
