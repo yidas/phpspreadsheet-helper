@@ -28,6 +28,7 @@ OUTLINE
   - [Add Rows](#add-rows)
     - [addRow()](#addrow)
     - [addRows()](#addrows)
+    - [Attributes](#attributes)
   - [PhpSpreadsheet Original Usage Integration](#phpspreadsheet-original-usage-integration)
     - [Inject PhpSpreadsheet](#inject-phpspreadsheet)
     - [Extract PhpSpreadsheet](#extract-phpspreadsheet)
@@ -233,12 +234,11 @@ public static array getRows(boolean $toString=true, array $options=[], callable 
 Add a row to the actived sheet of PhpSpreadsheet
 
 ```php
-public static self addRow(array $rowData)
+public static self addRow(array $rowData, array $rowAttributes=null)
 ```
 
-*`$rowData` value: string or array of attributes for a cell*
-
-  - attributes: `key`, `value`, [`col`](#merge-cells), [`row`](#merge-cells), [`skip`](#merge-cells),  [`width`](#columns-format)
+*`$rowData` value: An array contains string or [array of attributes](#attributes) for each cell*  
+*`$rowAttributes` value: string or [array of attributes](#attributes) for each cell of a row*
 
 *[Example of addRow()](#write-to-excel)*
 
@@ -250,18 +250,32 @@ public static self addRow(array $rowData)
     ->addRow(['ID', 'Name', 'Email']);
 ```
 
+*Example of setting attributes for each row:*
+
+```php
+\yidas\phpSpreadsheet\Helper::newSpreadsheet()
+    // Set width as 25 to all cells of this row
+    ->addRow([['value'=>'ID'], ['value'=>'Name'], ['value'=>'Email']], ['width'=>25]);
+```
+
 #### addRows()
 
 Add rows to the actived sheet of PhpSpreadsheet
 
 ```php
-public static self addRows(array $data)
+public static self addRows(array $data, array $rowAttributes=null)
 ```
 
-*`$data` value: array of each $rowData from `addRow()`*
+*`$data` value: array of each $rowData from `addRow()`*  
+*`$rowAttributes` value: string or [array of attributes](#attributes) for each row*
 
 *[Example of addRows()](#write-to-excel)*
 
+#### Attributes
+
+Attributes is a standard array for defining a cell or even a row, the keys are as follows:
+
+`key`, `value`, [`col`](#merge-cells), [`row`](#merge-cells), [`skip`](#merge-cells),  [`width`](#columns-format), [`style`](#cell-style)
 
 ### PhpSpreadsheet Original Usage Integration
 

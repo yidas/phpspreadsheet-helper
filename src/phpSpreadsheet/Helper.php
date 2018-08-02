@@ -311,16 +311,17 @@ class Helper
      * Add a row to the actived sheet of PhpSpreadsheet
      * 
      * @param array $rowData 
-     *  @param mixed|array Cell value | Data set 
-     *   Data set key-value:
+     *  @param mixed|array Cell value | Cell attributes 
+     *   Cell attributes key-value:
      *   @param int 'col' Column span for mergence
      *   @param int 'row' Row span for mergence
      *   @param int 'skip' Column skip counter
      *   @param string|int 'key' Cell key for index
      *   @param mixed 'value' Cell value
+     * @param array Row attributes refers to cell attributes
      * @return self
      */
-    public static function addRow($rowData)
+    public static function addRow($rowData, $rowAttributes=null)
     {
         $sheetObj = self::validSheetObj();
         
@@ -333,18 +334,40 @@ class Helper
         foreach ($rowData as $key => $cell) {
             
             // Attribute defining Cell
-            if (is_array($cell)) {
+            if (is_array($cell) || is_array($rowAttributes)) {
+
+                // Attr map: key as variable & value as value
+                $attributeMap = [
+                    // Basic attributes
+                    'key' => null,
+                    'value' => null,
+                    // Merging
+                    'col' => 1,
+                    'row' => 1,
+                    'skip' => 1,
+                    // Cell Format
+                    'width' => null,
+                    'style' => null,
+                ];
+
+                // Row attributes inheriting process (Based on default value of map)
+                foreach ($attributeMap as $key => $mapVal) {
                 
-                // Basic attributes
-                $key = isset($cell['key']) ? $cell['key'] : NULL;
-                $value = isset($cell['value']) ? $cell['value'] : NULL;
-                // Merging
-                $colspan = isset($cell['col']) ? $cell['col'] : 1;
-                $rowspan = isset($cell['row']) ? $cell['row'] : 1;
-                $skip = isset($cell['skip']) ? $cell['skip'] : 1;
-                // Cell Format
-                $width = isset($cell['width']) ? $cell['width'] : NULL;
-                $style = isset($cell['style']) ? $cell['style'] : NULL;
+                    ${$key} = isset($rowAttributes[$key]) ? $rowAttributes[$key] : $mapVal;
+                }
+
+                // Cell Process
+                if (is_string($cell)) {
+                    // Override value attribute
+                    $value = $cell;
+
+                } else {
+                    // Cell attributes process (Based on row attributes)
+                    foreach ($attributeMap as $key => $mapVal) {
+                    
+                        ${$key} = isset($cell[$key]) ? $cell[$key] : ${$key};
+                    }
+                }
 
                 // Cached column alpha
                 $colAlpha = self::num2alpha($posCol);
@@ -366,6 +389,8 @@ class Helper
                 }
 
                 // Merge handler
+                $colspan = & $col;
+                $rowspan = & $row;
                 if ($colspan>1 || $rowspan>1) {
                     $posColLast = $posCol;
                     $posCol = $posCol + $colspan - 1;
@@ -419,13 +444,14 @@ class Helper
      * Add rows to the actived sheet of PhpSpreadsheet
      * 
      * @param array array of rowData for addRow()
+     * @param array Row attributes refers to cell attributes
      * @return self
      */
-    public static function addRows($data)
+    public static function addRows($data, $rowAttributes=null)
     {
          foreach ($data as $key => $row) {
 
-            self::addRow($row);
+            self::addRow($row, $rowAttributes);
         }
 
         return new static();
