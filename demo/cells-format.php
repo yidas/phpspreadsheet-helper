@@ -12,4 +12,14 @@ require __DIR__ . '/_config.php';
     // ->setWrapText('B2')
     ->setAutoSize()
     // ->setAutoSize('B')
+    ->setStyle([
+        'borders' => [
+            'inside' => ['borderStyle' => 'hair'],
+            'outline' => ['borderStyle' => 'thin'],
+        ],
+        'fill' => [
+            'fillType' => 'solid',
+            'startColor' => ['argb' => 'FFCCCCCC'],
+        ],
+    ])
     ->output('Formatted Excel');  

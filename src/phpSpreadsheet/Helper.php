@@ -313,11 +313,13 @@ class Helper
      * @param array $rowData 
      *  @param mixed|array Cell value | Cell attributes 
      *   Cell attributes key-value:
+     *   @param string|int 'key' Cell key for index
+     *   @param mixed 'value' Cell value
      *   @param int 'col' Column span for mergence
      *   @param int 'row' Row span for mergence
      *   @param int 'skip' Column skip counter
-     *   @param string|int 'key' Cell key for index
-     *   @param mixed 'value' Cell value
+     *   @param int 'width' Column width pixels
+     *   @param array 'style' Array containing style information for applyFromArray()
      * @param array Row attributes refers to cell attributes
      * @return self
      */
@@ -704,7 +706,7 @@ class Helper
     }
 
     /**
-     * Set WrapText for all cells or set by giving range to the actived sheet
+     * Set WrapText for all actived cells or set by giving range to the actived sheet
      * 
      * @param string $range Cells range format
      * @param bool $value PhpSpreadsheet setWrapText() argument
@@ -724,7 +726,26 @@ class Helper
     }
 
     /**
-     * Set AutoSize for all cells or set by giving column range to the actived sheet
+     * Set Style for all actived cells or set by giving range to the actived sheet
+     * 
+     * @param array Array containing style information for applyFromArray()
+     * @param string $range Cells range format
+     * @return self
+     */
+    public static function setStyle($styleArray, $range=NULL)
+    {
+        $sheetObj = self::validSheetObj();
+
+        $range = ($range) ? $range : self::getRangeAll();
+
+        $sheetObj->getStyle($range)
+            ->applyFromArray($styleArray);
+        
+        return new static();
+    }
+
+    /**
+     * Set AutoSize for all actived cells or set by giving column range to the actived sheet
      * 
      * @param string $colAlphaStart Column Alpah of start
      * @param string $colAlphaEnd Column Alpah of end

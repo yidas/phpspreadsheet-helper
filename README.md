@@ -37,9 +37,12 @@ OUTLINE
     - [setSheet()](#setsheet)
     - [getSheet()](#getsheet)
   - [Map of Coordinates & Ranges](#multiple-sheets)
-  - [Cell Style](#cell-style)
+  - [Style Attribute](#style-attribute)
   - [Columns Format](#columns-format)
   - [Cells Format](#cells-format)
+    - [setStyle()](#setstyle)
+    - [setWrapText()](#setwraptext)
+    - [setAutoSize()](#setautosize)
 
 ---
 
@@ -275,7 +278,7 @@ public static self addRows(array $data, array $rowAttributes=null)
 
 Attributes is a standard array for defining a cell or even a row, the keys are as follows:
 
-`key`, `value`, [`col`](#merge-cells), [`row`](#merge-cells), [`skip`](#merge-cells),  [`width`](#columns-format), [`style`](#cell-style)
+`key`, `value`, [`col`](#merge-cells), [`row`](#merge-cells), [`skip`](#merge-cells),  [`width`](#columns-format), [`style`](#style-attribute)
 
 ### PhpSpreadsheet Original Usage Integration
 
@@ -467,11 +470,11 @@ sn range: A1:A2
 All range: A1:E4
 ```
 
-### Cell Style
+### Style Attribute
 
-The style attribute for each cell data:
+The style attribute could be set on a [single cell](#addrow), a [single row](#addrow) or even a [range of cells](#setstyle).
 
-* `style`: applyFromArray for the cell
+* `style`: a attribute refers to `applyFromArray()` for styling
 
 ```php
 \yidas\phpSpreadsheet\Helper::newSpreadsheet()
@@ -518,8 +521,17 @@ The options for each cell data:
 
 ### Cells Format
 
-* `setWrapText()`: Set to all cells by default
-* `setAutoSize()`: Set to all cells(columns) by default
+This section focuses on applying all actived cells or ranged cells on the sheet, not just effecting single cell, row or column.
+
+#### setStyle()
+
+Set Style for all actived cells or set by giving range to the actived sheet
+
+```php
+public static self setStyle(array $styleArray, string $range=NULL)
+```
+
+*Example:*
 
 ```php
 \yidas\phpSpreadsheet\Helper::newSpreadsheet()
@@ -532,5 +544,31 @@ The options for each cell data:
     // ->setWrapText('B2')
     ->setAutoSize()
     // ->setAutoSize('B')
+    ->setStyle([
+        'borders' => [
+            'inside' => ['borderStyle' => 'hair'],
+            'outline' => ['borderStyle' => 'thin'],
+        ],
+        'fill' => [
+            'fillType' => 'solid',
+            'startColor' => ['argb' => 'FFCCCCCC'],
+        ],
+    ])
     ->output('Formatted Excel');  
+```
+
+#### setWrapText()
+
+Set WrapText for all actived cells or set by giving range to the actived sheet
+
+```php
+public static self setWrapText(string $range=NULL, string $value=true)
+```
+
+#### setAutoSize()
+
+Set AutoSize for all actived cells or set by giving column range to the actived sheet
+
+```php
+public static self setAutoSize(string $colAlphaStart=NULL, string $colAlphaEnd=NULL, boolean $value=true)
 ```
