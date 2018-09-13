@@ -43,6 +43,8 @@ OUTLINE
     - [setStyle()](#setstyle)
     - [setWrapText()](#setwraptext)
     - [setAutoSize()](#setautosize)
+- [Limitations](#limitations)
+  - [Performance Issue](#performance-issue)
 
 ---
 
@@ -572,3 +574,18 @@ Set AutoSize for all actived cells or set by giving column range to the actived 
 ```php
 public static self setAutoSize(string $colAlphaStart=NULL, string $colAlphaEnd=NULL, boolean $value=true)
 ```
+
+---
+
+LIMITATIONS
+-----------
+
+### Performance Issue
+
+If you're building large cell data with XLSX, you may face performance issue with memory usage and execution time.
+
+[box/spout](https://github.com/box/spout) spreadsheet lirary supports building Excel file with high performance, you could use this library instead if you do not need more style and formatting requirements.
+
+
+
+
