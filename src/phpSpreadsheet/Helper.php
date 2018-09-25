@@ -393,6 +393,7 @@ class Helper
                 // Merge handler
                 $colspan = & $col;
                 $rowspan = & $row;
+                $mergeVal = null;
                 if ($colspan>1 || $rowspan>1) {
                     $posColLast = $posCol;
                     $posCol = $posCol + $colspan - 1;
