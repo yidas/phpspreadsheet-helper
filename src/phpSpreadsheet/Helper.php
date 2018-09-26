@@ -353,9 +353,9 @@ class Helper
                 ];
 
                 // Row attributes inheriting process (Based on default value of map)
-                foreach ($attributeMap as $key => $mapVal) {
+                foreach ($attributeMap as $aKey => $mapVal) {
                 
-                    ${$key} = isset($rowAttributes[$key]) ? $rowAttributes[$key] : $mapVal;
+                    ${$aKey} = isset($rowAttributes[$aKey]) ? $rowAttributes[$aKey] : $mapVal;
                 }
 
                 // Cell Process
@@ -365,9 +365,9 @@ class Helper
 
                 } else {
                     // Cell attributes process (Based on row attributes)
-                    foreach ($attributeMap as $key => $mapVal) {
+                    foreach ($attributeMap as $aKey => $mapVal) {
                     
-                        ${$key} = isset($cell[$key]) ? $cell[$key] : ${$key};
+                        ${$aKey} = isset($cell[$aKey]) ? $cell[$aKey] : ${$aKey};
                     }
                 }
 
@@ -393,6 +393,7 @@ class Helper
                 // Merge handler
                 $colspan = & $col;
                 $rowspan = & $row;
+                $mergeVal = null;
                 if ($colspan>1 || $rowspan>1) {
                     $posColLast = $posCol;
                     $posCol = $posCol + $colspan - 1;
