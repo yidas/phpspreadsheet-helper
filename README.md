@@ -37,9 +37,9 @@ OUTLINE
     - [setSheet()](#setsheet)
     - [getSheet()](#getsheet)
   - [Map of Coordinates & Ranges](#multiple-sheets)
-  - [Style Attribute](#style-attribute)
+  - [Style Attributes](#style-attributes)
   - [Columns Format](#columns-format)
-  - [Cells Format](#cells-format)
+  - [All Cells Format](#all-cells-format)
     - [setStyle()](#setstyle)
     - [setWrapText()](#setwraptext)
     - [setAutoSize()](#setautosize)
@@ -472,7 +472,7 @@ sn range: A1:A2
 All range: A1:E4
 ```
 
-### Style Attribute
+### Style Attributes
 
 The style attribute could be set on a [single cell](#addrow), a [single row](#addrow) or even a [range of cells](#setstyle).
 
@@ -480,26 +480,46 @@ The style attribute could be set on a [single cell](#addrow), a [single row](#ad
 
 ```php
 \yidas\phpSpreadsheet\Helper::newSpreadsheet()
-    ->addRow(['Percentage', '10%', 
-        ['value'=>'content', 'style'=> 
-            [
-                'font' => [
-                    'bold' => true,
-                    'color' => ['argb' => 'FFFF0000']
-                ],
-                'alignment' => ['horizontal' => 'right'],
-                'borders' => [
-                    'top' => ['borderStyle' => 'thin'],
-                ],
-                'fill' => [
-                    'fillType' => 'linear',
-                    'rotation' => 90,
-                    'startColor' => ['argb' => 'FFA0A0A0'],
-                    'endColor' => ['argb' => 'FFFFFFFF'],
-                ],
-            ]
-        ]
+    // Each cell with each style attributes
+    ->addRow([
+        'Percentage', 
+        '10%', 
+        ['value'=>'content', 'style'=> [
+            'font' => [
+                'bold' => true,
+                'color' => ['argb' => 'FFFF0000']
+            ],
+            'alignment' => ['horizontal' => 'right'],
+            'borders' => [
+                'top' => ['borderStyle' => 'thin'],
+            ],
+            'fill' => [
+                'fillType' => 'linear',
+                'rotation' => 90,
+                'startColor' => ['argb' => 'FFA0A0A0'],
+                'endColor' => ['argb' => 'FFFFFFFF'],
+            ],
+        ]],
+        ['value'=>'10000', 'style'=> [
+            'numberFormat' => [
+                'formatCode' => '#,##0',
+            ],
+        ]],
     ])
+    // Row with thousands separator format style
+    ->addRow(['1000', '2000', '3000', '4000'], ['style' => [
+        'numberFormat' => [
+            // const FORMAT_NUMBER_COMMA_SEPARATED1 = '#,##0.00';
+            'formatCode' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
+        ],
+    ]]) 
+    // Row with percentage format style
+    ->addRow(['0.1', '0.15', '0.3145', '0.855'], ['style' => [
+        'numberFormat' => [
+            // const FORMAT_PERCENTAGE_00 = '0.00%';
+            'formatCode' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_PERCENTAGE_00,
+        ],
+    ]]) 
     ->output();
 ```
 
@@ -521,7 +541,7 @@ The options for each cell data:
     ->output('My Excel'); 
 ```
 
-### Cells Format
+### All Cells Format
 
 This section focuses on applying all actived cells or ranged cells on the sheet, not just effecting single cell, row or column.
 
