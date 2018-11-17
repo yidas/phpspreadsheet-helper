@@ -4,10 +4,9 @@ PHPSpreadsheet Helper
 PHP Excel Helper - Write and read Spreadsheet with easy way based on PhpSpreadsheet
 
 [![Latest Stable Version](https://poser.pugx.org/yidas/phpspreadsheet-helper/v/stable?format=flat-square)](https://packagist.org/packages/yidas/phpspreadsheet-helper)
-[![Latest Unstable Version](https://poser.pugx.org/yidas/phpspreadsheet-helper/v/unstable?format=flat-square)](https://packagist.org/packages/yidas/phpspreadsheet-helper)
 [![License](https://poser.pugx.org/yidas/phpspreadsheet-helper/license?format=flat-square)](https://packagist.org/packages/yidas/phpspreadsheet-helper)
 
-This library is a helper that encapsulate [PhpSpreadsheet](https://github.com/PHPOffice/PhpSpreadsheet) for simple usage.
+This library is a helper that encapsulate [PhpSpreadsheet](https://github.com/PHPOffice/PhpSpreadsheet) ([Documentation](https://phpspreadsheet.readthedocs.io/en/develop/)) for simple usage.
 
 ---
 
@@ -523,7 +522,7 @@ The style attribute could be set on a [single cell](#addrow), a [single row](#ad
     ->output();
 ```
 
-> Style array key/value/constant refers [Style Classes](https://github.com/PHPOffice/PhpSpreadsheet/tree/develop/src/PhpSpreadsheet/Style)
+> Style array key/value/constant refers [Valid array keys for style `applyFromArray()`](https://phpspreadsheet.readthedocs.io/en/develop/topics/recipes/#valid-array-keys-for-style-applyfromarray) or [Source Classes](https://github.com/PHPOffice/PhpSpreadsheet/tree/master/src/PhpSpreadsheet/Style)
 
 ### Columns Format
 
