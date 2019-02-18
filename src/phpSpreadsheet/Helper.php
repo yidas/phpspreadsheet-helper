@@ -8,7 +8,7 @@ use Exception;
  * PhpSpreadsheet Helper
  * 
  * @author      Nick Tsai <myintaer@gmail.com>
- * @version     1.3.2
+ * @version     1.3.3
  * @filesource 	PhpSpreadsheet <https://github.com/PHPOffice/PhpSpreadsheet>
  * @see         https://github.com/yidas/phpspreadsheet-helper
  * @example
@@ -359,16 +359,17 @@ class Helper
                 }
 
                 // Cell Process
-                if (is_string($cell)) {
-                    // Override value attribute
-                    $value = $cell;
+                if (is_array($cell)) {
 
-                } else {
                     // Cell attributes process (Based on row attributes)
                     foreach ($attributeMap as $aKey => $mapVal) {
                     
                         ${$aKey} = isset($cell[$aKey]) ? $cell[$aKey] : ${$aKey};
                     }
+                    
+                } else {
+                    // Override value attribute
+                    $value = $cell;
                 }
 
                 // Cached column alpha
