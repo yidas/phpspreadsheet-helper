@@ -485,7 +485,7 @@ class Helper
 
         // Redirect output to a client's web browser
         header("Content-Type: {$contentType}");
-        header("Content-Disposition: attachment;filename=\"{$filename}{$extension}\"");
+        header("Content-Disposition: attachment;filename=\"" . urlencode($filename.$extension) . "\"");
         header("Cache-Control: max-age=0");
 
         $objWriter->save('php://output');
