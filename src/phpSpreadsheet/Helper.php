@@ -8,7 +8,7 @@ use Exception;
  * PhpSpreadsheet Helper
  * 
  * @author      Nick Tsai <myintaer@gmail.com>
- * @version     1.3.4.1
+ * @version     1.3.5
  * @filesource 	PhpSpreadsheet <https://github.com/PHPOffice/PhpSpreadsheet>
  * @see         https://github.com/yidas/phpspreadsheet-helper
  * @example
@@ -486,10 +486,10 @@ class Helper
         // Redirect output to a client's web browser
         header("Content-Type: {$contentType}");
         /**
-         * @todo Support Edge and IE global language encode
+         * @see http://www.rfc-editor.org/rfc/rfc5987.txt
          */
         $filename = rawurlencode($filename);
-        header("Content-Disposition: attachment;filename=\"{$filename}{$extension}\";filename*=\"utf-8''{$filename}{$extension}\";");
+        header("Content-Disposition: attachment; filename={$filename}{$extension}; filename*=UTF-8''{$filename}{$extension};");
         header("Cache-Control: max-age=0");
 
         $objWriter->save('php://output');
