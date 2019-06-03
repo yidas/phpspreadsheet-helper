@@ -8,7 +8,7 @@ use Exception;
  * PhpSpreadsheet Helper
  * 
  * @author      Nick Tsai <myintaer@gmail.com>
- * @version     1.3.5
+ * @version     1.3.6
  * @filesource 	PhpSpreadsheet <https://github.com/PHPOffice/PhpSpreadsheet>
  * @see         https://github.com/yidas/phpspreadsheet-helper
  * @example
@@ -84,12 +84,12 @@ class Helper
             'extension' => '.ods',
             'contentType' => 'application/vnd.oasis.opendocument.spreadsheet'
         ],
-        'Xlsx' => [
-            'extension' => '.xlsx',
-            'contentType' => 'application/vnd.ms-excel'
-        ],
         'Xls' => [
             'extension' => '.xls',
+            'contentType' => 'application/vnd.ms-excel'
+        ],
+        'Xlsx' => [
+            'extension' => '.xlsx',
             'contentType' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         ],
         'Html' => [
