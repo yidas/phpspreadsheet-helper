@@ -5,6 +5,9 @@ PHP Excel Helper - Write and read Spreadsheet with easy way based on PhpSpreadsh
 
 [![Latest Stable Version](https://poser.pugx.org/yidas/phpspreadsheet-helper/v/stable?format=flat-square)](https://packagist.org/packages/yidas/phpspreadsheet-helper)
 [![License](https://poser.pugx.org/yidas/phpspreadsheet-helper/license?format=flat-square)](https://packagist.org/packages/yidas/phpspreadsheet-helper)
+[![Total Downloads](https://poser.pugx.org/yidas/phpspreadsheet-helper/downloads?format=flat-square)](https://packagist.org/packages/yidas/phpspreadsheet-helper)
+[![Monthly Downloads](https://poser.pugx.org/yidas/phpspreadsheet-helper/d/monthly?format=flat-square)](https://packagist.org/packages/yidas/phpspreadsheet-helper)
+
 
 This library is a helper that encapsulate [PhpSpreadsheet](https://github.com/PHPOffice/PhpSpreadsheet) ([Documentation](https://phpspreadsheet.readthedocs.io/en/develop/)) for simple usage.
 
