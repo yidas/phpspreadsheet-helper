@@ -347,6 +347,7 @@ class Helper
                     'col' => 1,
                     'row' => 1,
                     'skip' => 1,
+                    'attrPosCol' => null
                     // Cell Format
                     'width' => null,
                     'style' => null,
@@ -370,6 +371,10 @@ class Helper
                 } else {
                     // Override value attribute
                     $value = $cell;
+                }
+                
+                 if ($attrPosCol) {
+                    $posCol = $attrPosCol;
                 }
 
                 // Cached column alpha
