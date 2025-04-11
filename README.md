@@ -45,6 +45,8 @@ OUTLINE
     - [setStyle()](#setstyle)
     - [setWrapText()](#setwraptext)
     - [setAutoSize()](#setautosize)
+* [Setting](#setting)
+  - [setTimezone()](#setTimezone)
 - [Limitations](#limitations)
   - [Performance Issue](#performance-issue)
 
@@ -595,6 +597,30 @@ Set AutoSize for all actived cells or set by giving column range to the actived 
 
 ```php
 public static self setAutoSize(string $colAlphaStart=NULL, string $colAlphaEnd=NULL, boolean $value=true)
+```
+
+---
+
+SETTING
+-------
+
+### setTimezone()
+
+This helper will automatically align the spreadsheet’s timezone with your PHP default timezone.  
+However, you can still customize the target timezone for the spreadsheet if needed.
+
+```php
+public static self setTimezone(string $timezoneString=NULL)
+```
+
+*Example:*
+```php
+use \yidas\phpSpreadsheet\Helper;
+
+Helper::setTimezone("Europe/London");
+echo Helper::getTimezone();
+$rows = $rowHelper::newSpreadsheet('/tmp/excel.xlsx')
+    ->getRows();
 ```
 
 ---
