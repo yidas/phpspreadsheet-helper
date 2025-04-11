@@ -4,6 +4,9 @@ require __DIR__ . '/_config.php';
 
 use \yidas\phpSpreadsheet\Helper;
 
+// Helper::setTimezone("Europe/London");
+// echo Helper::getTimezone();
+
 $filepath = __DIR__ . '/import.xlsx';
 
 $row1 = Helper::newSpreadsheet($filepath)
