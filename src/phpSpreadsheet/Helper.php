@@ -28,9 +28,9 @@ class Helper
     private static $_objSpreadsheet;
 
     /**
-     * @var boolean Check whether a time zone has been explicitly set.
+     * @var boolean Check whether a time zone has been initialized.
      */
-    private static $_hasCustomTimezone = false;
+    private static $_isTimezoneInitialized = false;
     
     /**
      * @var object Cached PhpSpreadsheet Sheet object
@@ -148,18 +148,14 @@ class Helper
      */
     public static function setTimezone($timezoneString=null) {
 
-        # Initial call to set the timezone based on the PHP default timezone
-        $targetTimezoneString = date_default_timezone_get();
-
-        # Specify target timezone
-        if ($timezoneString) {
-            self::$_hasCustomTimezone = true;
-            $targetTimezoneString = $timezoneString;
-        }
         # No timezone was given, but a custom timezone is already set
-        elseif (self::$_hasCustomTimezone) {
+        if (!$timezoneString && self::$_isTimezoneInitialized) {
             return false;
         }
+
+        # Initial call to set the timezone based on the PHP default timezone
+        $targetTimezoneString = ($timezoneString) ? $timezoneString : date_default_timezone_get();
+        self::$_isTimezoneInitialized = true;
         
         return \PhpOffice\PhpSpreadsheet\Shared\Date::setDefaultTimezone($targetTimezoneString);
     }
