@@ -563,6 +563,41 @@ class Helper
         $objWriter->save($filepath);
         return $filepath;
     }
+    
+    /**
+     * Output file content to base64 uri string
+     * @param string $format
+     * @return string
+     *
+     * @throws \Exception
+     */
+    public static function getFileContent($format = 'Xlsx')
+    {
+        self::cleanOutput();
+
+        $objPhpSpreadsheet = self::validExcelObj();
+
+        // Create Writer first
+        $objWriter = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($objPhpSpreadsheet, $format);
+        $objWriter->setPreCalculateFormulas(true);
+
+        /**
+         * Type Mapping
+         */
+        $inTypeList = isset(self::$_writerTypeInfo[$format]);
+        $contentType = ($inTypeList) ? self::$_writerTypeInfo[$format]['contentType'] : '';
+
+        ob_start();
+        // Save file
+        $objWriter->save('php://output');
+        $content = ob_get_contents();
+        ob_clean();
+
+        $base64FileContent = base64_encode($content);
+
+        return "data:{$contentType};base64,{$base64FileContent}";
+    }
+
 
     /**
      * Get data of a row from the actived sheet of PhpSpreadsheet
@@ -899,6 +934,17 @@ class Helper
         else {
             
             throw new Exception("Invalid or empty PhpSpreadsheet Sheet Object", 400);
+        }
+    }
+    
+    /**
+     * This function discards the contents of the top most output buffer
+     * and turns off this output buffering.
+     */
+    private static function cleanOutput()
+    {
+        for ($level = ob_get_level(); $level > 0; --$level) {
+            @ob_end_clean();
         }
     }
 }
