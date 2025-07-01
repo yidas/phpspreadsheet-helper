@@ -359,6 +359,8 @@ It's easy to merge cells by defining each cell's span attributes:
     ->output('Merged Excel');
 ```
 
+<img src="https://github.com/yidas/phpspreadsheet-helper/blob/master/img/demo-merge-cells.png" width="50%" />
+
 ### Multiple Sheets
 
 #### setSheet()
